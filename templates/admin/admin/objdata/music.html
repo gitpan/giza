@@ -1,0 +1,50 @@
+<?storeproperties music?>
+<?usevar music:url?>
+<?usevar music:title?>
+<?usevar music:artist?>
+<?usevar music:album?>
+<?usevar music:comment?>
+<?usevar music:year?>
+<?usevar music:track_no?>
+<?usevar music:genre?>
+
+<ol>
+	<table border="0">
+	<tr>
+		<th>URL</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="url" value="<?evar music:url?>"></td>
+	</tr><tr>
+		<th>Title</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="title" value="<?evar music:title?>"></td>
+	</tr><tr>
+		<th>Artist</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="artist" value="<?evar music:artist?>"></td>
+	</tr><tr>
+		<th>Album</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="album" value="<?evar music:album?>"></td>
+	</tr><tr>
+		<th>Comment</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="comment" value="<?evar music:comment?>"></td>
+	</tr><tr>
+		<th>Year</th>
+	</tr><tr>
+		<td><input size="4" type="text" name="year" value="<?evar music:year?>"></td>
+	</tr><tr>
+		<th>Track No</th>
+	</tr><tr>
+		<td><input type="text" size="4" name="track_no" value="<?evar music:track_no?>"</td>
+	</tr><tr>
+		<th>Genre</th>
+	</tr><tr>
+		<td><input type="text" name="genre" value="<?evar music:genre?>"</td>
+	</tr>
+	</table>
+</ol>
+
+<?joinproperties music obj data?>
+<input type="hidden" name="data" value="<?evar obj:data?>">

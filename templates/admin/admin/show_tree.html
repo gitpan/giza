@@ -1,0 +1,39 @@
+<?getsession?>
+<?login?>
+<?usevar cgi:page?>
+<?usevar cgi:parent?>
+<?header?>
+
+
+  <?defaultvalue objdefaults:directory "admin/show_tree/directory.html"?>
+  <?defaultvalue objdefaults:treeview "admin/show_tree/treeview.html"?>
+  <?include header/header.html?>
+  <?include header/title.html?>
+  <?include header/meta.html?>
+  <?include header/style.html?>
+
+  <?exec catalog:get 'parent=&gt;${giza:parent}'?>
+  <script name="JavaScript1.2">
+  <!--//
+	function setParentParent(path, name) {
+		if(window.opener && !window.opener.closed) {
+			window.opener.document.objectedit.parent.value = path;
+			window.close();
+		}
+	}
+  //-->
+  </script>
+  <?include header/end.html?>
+
+
+<body>
+
+<div class="header">Select from tree</div>
+
+<?exec catalog:treeview?><br/>&nbsp;<br/>
+<?exec catalog:directories?>
+
+
+</body>
+
+<?include footer/footer.html?>

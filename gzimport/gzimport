@@ -1,0 +1,121 @@
+#!/usr/bin/perl 
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+# gzimport - import giza xml files to the giza database.
+# (c) 1996-2002 ABC Startsiden AS, see the file AUTHORS.
+#
+# See the file LICENSE in the Giza top source distribution tree for
+# licensing information. If this file is not present you are *not*
+# allowed to view, run, copy or change this software or it's sourcecode.
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+#####
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+use strict;
+use Giza qw(:all);
+use Giza::Modules;
+use XML::Parser;
+use XML::SimpleObject;
+use Data::Dumper;
+use vars qw($myself);
+
+($myself = $0) =~ s%.*/%%;
+
+my($giza, $db, $user) = giza_session(qw(db user));
+
+my $file = shift @ARGV;
+die "Usage: $0 <xmlfile>\n" unless defined $file;
+
+$db->connect() or die $giza->error();
+
+my $xmlp = new XML::Parser(
+	ErrorContext => 2,
+	Style => "Tree"
+);
+my $X = new XML::SimpleObject(
+	$xmlp->parsefile($file)
+);
+
+select(STDERR);
+print "Importing objects... \n\n";
+
+# e for element.
+foreach my $e ($X->child("category_import")->children("object"))
+{
+	if($e->attribute("type")) {
+		my $type = undef;
+		SWITCH: {
+			$_ = $e->attribute("type");
+			$type='catalog',   last SWITCH	if /dir/ or /cat/;
+			$type='image', last SWITCH  if /ima?ge|pic/;
+			$type='guide', last SWITCH  if /guide/;
+			$type='link',  last SWITCH	if /link/;
+			$type='reference',   last SWITCH	if /ref/;
+			$type=$_;
+		};
+
+
+		my $object = new Giza::Object(giza=>$giza, db=>$db, user=>$user, type => $type);
+		if(defined $e->child("parent")->value) {
+			my $parent = $db->parent_by_expr($e->child("parent")->value)
+				or print $giza->error();
+
+			if($type eq 'reference') {
+				$object->data($db->id_by_expr($e->child("data")->value));
+				$db->inc_refs_to($object->data);
+			} else {
+				$object->data($e->child("data")->value) if defined $e->child("data");
+			}
+
+			if($e->child("active")->value eq 'yes') {
+				$object->active(1);
+			} else {
+				$object->active(0);
+			}
+				
+
+			$object->parent($parent);
+			$object->set_defaults;
+			$object->sort($e->child("sort")->value) if defined $e->child("sort");
+			$object->type($e->child("type")->value) if defined $e->child("type");
+			$object->name($e->child("name")->value) if defined $e->child("name");
+			$object->owner($e->child("owner")->value) if defined $e->child("owner");
+			$object->groupo($e->child("groupo")->value) if defined $e->child("groupo");
+			$object->created($e->child("created")->value) if defined $e->child("created");
+			$object->changed($e->child("changed")->value) if defined $e->child("changed");
+			$object->u_perms($e->child("u_perms")->value) if defined $e->child("u_perms");
+			$object->g_perms($e->child("g_perms")->value) if defined $e->child("g_perms");
+			$object->o_perms($e->child("o_perms")->value) if defined $e->child("o_perms");
+			$object->sort_by($e->child("sort_by")->value) if defined $e->child("sort_by");
+			$object->template($e->child("template")->value) if defined $e->child("template");
+			$object->revised_by($e->child("revised_by")->value) if defined $e->child("revised_by");
+			$object->refs_to_us($e->child("refs_to_us")->value) if defined $e->child("refs_to_us");
+			$object->description($e->child("description")->value) if defined $e->child("description");
+
+			print "\t".$object->name."\n";
+
+			die($giza->error, " ($parent:".$e->child("parent")->value.")\n") unless $parent;
+			$object->save;
+		}
+		else {
+			$giza->error("A object element is missing a parent");
+			exit FALSE;
+		}
+	}
+	else {
+		$giza->error("Missing type attribute *somewhere*");
+		exit FALSE;
+	}
+}
+
+END {
+	$db->disconnect() if $db->connected();
+}
+
+__END__

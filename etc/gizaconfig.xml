@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+
+#%include <config.pimpx>
+
+<config>
+	<global>
+		<title>Giza2</title>
+		<!-- 	Print debugging information.
+				Could reaveal sensistive information,
+				not a good idea on live sites. 		-->
+		<debug>1</debug>
+		<template_dir>templates/admin/</template_dir>
+		<admin>templates/admin/admin/</admin>
+#%ifdef PREFIX
+#%print <sessiondb>%{PREFIX}/var/db/session.bdb</sessiondb>
+#%endif
+		<directoryindex>index.html</directoryindex>
+	</global>
+
+	<database>
+		<!-- database type can be any of the current:
+			postgres 	- PostgreSQL
+			db2			- IBM DB2
+			mysql		- mySQL
+			msql		- mSQL
+
+			Others can probably be easily added by extending
+			the connect() function in Giza::DB 				-->
+#%ifdef DBTYPE
+#%  print	<type>%{DBTYPE}</type>
+#%endif
+#%ifdef DBHOST
+#%  print	<host>%{DBHOST}</host>		<!-- hostname of database server -->
+#%endif
+#%ifdef DBNAME
+#%  print	<db>%{DBNAME}</db>			<!-- name of database to use -->
+#%endif
+#%ifdef DBUSER
+#%  print		<username>%{DBUSER}</username>	<!-- username that has access to that database -->
+#%endif
+#%ifdef DBPASS
+#%  print		<password>%{DBPASS}</password>	<!-- password for that user -->
+#%endif
+	</database>
+
+	<objects>
+		<!-- if inherit is set to one, objects will get use the
+			 values of their parent object as the default.  	-->
+		<inherit>1</inherit>
+		<!-- this will add the char "@" at the end of the name of each reference 
+			 that is a catalog -->
+		<add_at_on_dir_refs/>
+	</objects>
+
+	<!-- defaults to use for new object. If inherit is set to 1,
+		 this is only used when the object has no parent.		-->
+	<defaults>
+		<parent>1</parent>
+		<active>false</active>
+		<owner>1</owner>
+		<groupo>100</groupo>
+		<revised_by/>
+		<sort>0</sort>
+		<mode>0775</mode>
+	</defaults>
+
+	<!-- TODO: Configuration for the admin interface -->
+	<admin>
+		<access>
+			<default>deny</default>
+			<ip>10.0.0.</ip>
+			<ip>127.</ip>
+		</access>
+	</admin>
+
+	<template>
+		<index>index.html</index>
+		<treeview>treeview.html</treeview>
+		<error>error.html</error>
+		<login>admin/login.html</login>
+		<userentry>admin/list_users/user_entry.html</userentry>
+		<groupentry>admin/list_groups/group_entry.html</groupentry>
+		<object_defaults>
+			<link>objects/link.html</link>
+			<directory>objects/directory.html</directory>
+			<image>objects/image.html</image>
+			<guide>objects/guide.html</guide>
+			<reference>objects/reference.html</reference>
+			<ftp>objects/ftp.html</ftp>
+			<mp3>objects/mp3.html</mp3>
+			<ogg>objects/ogg.html</ogg>
+		</object_defaults>
+		<functions>
+			<module>Giza::Template::Function::Catalog</module>
+			<module>Giza::Template::Function::User</module>
+			<module>Giza::Template::Function::Group</module>
+			<module>Giza::Template::Function::TestClass</module>
+			<module>Giza::Template::Function::Preferences</module>
+		</functions>
+	</template>
+
+	<components>
+		<module>Giza::Component::Rate</module>
+		<module>Giza::Component::Rate</module>
+	</components>
+
+	<forwarder>
+		<forwardhandler>Giza::Handler::Forward::ClickDB</forwardhandler>
+		<handlerconfig>
+			<db>var/db/click.db</db>
+		</handlerconfig>
+	</forwarder>
+
+	<search>
+		<module>Giza::Search::OpenFTS</module>
+	</search>
+			
+</config>

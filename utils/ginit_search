@@ -1,0 +1,36 @@
+#!/usr/bin/perl 
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+use strict;
+use CGI;
+use Giza;
+use Giza::Modules;
+
+#%ifdef DEBUG
+use CGI::Carp qw(fatalsToBrowser);
+#%endif
+
+chdir $Giza::PREFIX;
+my $query = new CGI;
+
+my($giza, $db, $user) = giza_session(qw(db user));
+my $searchmod = $giza->config->{search}{module};
+
+$db->connect() or die $giza->error();
+
+eval "
+	use $searchmod;
+	my \$idx = ${searchmod}->new(giza => \$giza, user => \$user, db => \$db);
+	\$idx->init();
+"; die "$@\n" if $@;
+
+END {
+	$db->disconnect();
+}

@@ -1,0 +1,42 @@
+<?storeproperties ftp?>
+<?usevar ftp:port?>
+<?usevar ftp:username?>
+<?usevar ftp:password?>
+<?usevar ftp:host?>
+<?usevar ftp:directory?>
+
+<ol>
+	<table border="0">
+	<tr>
+		<th>Hostname</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="host" value="<?evar ftp:host?>"></td>
+	</tr><tr>
+		<th>Port</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="port" value="<?evar ftp:port?>"></td>
+	</tr><tr>
+		<th>Username</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="username" value="<?evar ftp:username?>"></td>
+	</tr><tr>
+		<th>Password</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="password" value="<?evar ftp:password?>"></td>
+	</tr><tr>
+		<th>Directory</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="directory" value="<?evar ftp:directory?>"></td>
+	</tr><tr>
+		<th>Preview URL</th>
+	</tr><tr>
+		<td>
+			<a href="ftp://<?evar ftp:username?>:<?evar ftp:password?>@<?evar ftp:host?>:<?evar ftp:port?>/<?evar ftp:directory?>"
+			>ftp://<?evar ftp:username?>:<?evar ftp:password?>@<?evar ftp:host?>:<?evar ftp:port?>/<?evar ftp:directory?></a>
+		</td>
+	</tr>
+	</table>
+</ol>
+
+<?joinproperties ftp obj data?>
+<input type="hidden" name="data" value="<?evar obj:data?>">

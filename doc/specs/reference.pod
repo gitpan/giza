@@ -1,0 +1,44 @@
+=head1 NAME
+
+Giza2 - Giza Catalog References
+
+=head1 ABOUT THIS DOCUMENT
+
+This document describes the catalog object reference implementation
+in Giza2.
+
+=head1 SPECIFICATION OF GIZA CATALOG OBJECT REFERENCES
+
+A reference is identified by checking the type field.
+If the type field has a type of G_OBJ_REF (currently defined as 2),
+it is a reference to another object.
+
+Each object has it's own refs_to_us field, this should be incremented and
+decremented as references to the object are created and deleted.
+Additionally a cronjob or similiar should be ran at appropriate times
+to ensure that all objects are in sync with their count of references.
+
+To ensure a consistent way of allowing references, the following
+rules should apply:
+
+=over 4
+
+=item 1.1 A object cannot be deleted until the refs_to_us field is 0.
+
+=item 1.2 The reference recursion depth cannot exceed 100.
+
+=item 1.3 A reference cannot point to itself or a reference that points back.
+
+=back
+
+=head1 FUNCTIONS
+
+=over 4
+
+=item int delete_all_references(int $objectid)
+
+=back
+
+=head1 AUTHORS
+
+Ask Solem Hoel E<lt>ask@startsiden.no<gt>

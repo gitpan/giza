@@ -1,0 +1,36 @@
+global {
+	debug	1;
+	verbose	1;
+}
+
+database {
+	type		postgres;
+	host		localhost;
+	db			giza2;
+	username	ask;
+	password	tr80Uio;
+}
+
+objects {
+	init-with-values-from-parent 1;
+}
+
+defaults {
+	parent		1;
+	active		false;
+	owner		1;
+	group		1;
+	revised_by 	;
+	sort		0;
+	u_perms		100;
+	g_perms		100;
+	o_perms		000;
+	template	templates/default.html;
+	sort_by		sort;
+}
+
+admin {
+	access-by-ip 10.0.0. 127.;
+}
+		
+		

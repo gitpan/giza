@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+
+use Giza;
+use Giza::Object qw(:all);
+use Giza::User;
+
+my $g = new Giza;
+
+my $link = new Giza::Object($giza,
+	type	=> GOBJ_LINK
+);
+
+$link->set_name("prismatic");
+$link->set_description("Musikkgruppe paa nett");
+$link->set_data("http://www.prismatic.org");
+$link->set_active();
+
+$link->save() or die $g->error(), "\n";
+

@@ -1,0 +1,16 @@
+PERL=/usr/bin/perl
+PERLFLAGS=
+PIMPX=/usr/local/bin/pimpx
+PREFIX=/opt/giza2
+DBTYPE=postgres
+SQL_SEQUENCES=0
+DBNAME=giza2
+DBUSER=giza
+DBPASS=
+DBHOST=localhost
+DEBUG=0
+CONFIG_CACHE_TYPE=memshare
+WEBUSER=nobody
+WEBGROUP=nobody
+SELFLOADER=0
+HAVE_TIME__HIRES=0

@@ -1,0 +1,17 @@
+Giza so far requires:
+
+	perl 5.6.0 or higher.
+	CGI
+	CGI::Carp
+	CGI::Cookie
+	XML::Simple
+	XML::SimpleObject
+	Class::Struct
+	Time::HiRes
+	Crypt::Blowfish
+	Crypt::PasswdMD5
+	DB_File
+	DBI
+	HTML::Entities
+
+	pimpx <http://www.unixmonks.net/pimpx>

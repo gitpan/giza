@@ -1,0 +1,191 @@
+<?getsession?>
+<?set opt:set_object_checkbox_flags?>
+<?set opt:convert_ugid_to_name?>
+<?set opt:get_object_pathname?>
+<?set opt:no_object_cache?>
+<?set opt:dont_recurse_refs?>
+<?usevar cgi:page?>
+<?usevar cgi:oid?>
+<?usevar cgi:parent?>
+<?login?>
+
+  <?header ?>
+  <?include header/header.html?>
+  <?include header/title.html?>
+  <?include header/meta.html?>
+  <?include header/style.html?>
+  <script name="JavaScript1.2">
+  <!--//
+	function popupUserList() {
+		mode = 'height=530,width=430,scrollbars=1,resizable=1';
+		userlist = window.open('<?evar cgi:script_name?>?page=admin/list_users.html', 'sub', mode);
+		userlist.focus();
+	}
+	function popupGroupList() {
+		mode = 'height=530,width=430,scrollbars=1,resizable=1';
+		grouplist = window.open('<?evar cgi:script_name?>?page=admin/list_groups.html', 'sub', mode);
+		grouplist.focus();
+	}
+	function popupParentList(pid) {
+		mode = 'height=100,width=100,scrollbars=1,resizable=1';
+		page = '<?evar cgi:script_name?>?page=admin/show_tree.html&parent=' + pid;
+		treelist = window.open(page, 'sub', mode);
+		treelist.focus();
+	}
+	function checkForDeleteObject() {
+		var oid = "<?evar cgi:oid?>";
+		var name   = document.objectedit.name.value;
+		if(!name && parseInt(oid) > 0) {
+			if(confirm('Do you really want to delete this object?')) {
+				document.objectedit.submit();
+			}
+		}
+		else {
+			document.objectedit.submit();
+		}
+	}
+  //-->
+  </script>
+  <?include header/end.html?>
+
+<body> 
+	<?include table_start.html?>
+	<?include leftmenu.html?>
+  <?usevar cgi:action?>
+  <?usevar cgi:referer?>
+  <?usevar cgi:do?>
+  <?usevar cgi:details?>
+  <?usevar obj:name?>
+  <?usevar obj:type?>
+  <?usevar cgi:type?>
+  <?usevar obj:data?>
+  <?usevar obj:keywords?>
+  <?usevar obj:description?>
+  <?usevar obj:parent?>
+  <?usevar obj:owner?>
+  <?usevar obj:groupo?>
+  <?usevar obj:sort?>
+  <?usevar obj:template?>
+  <?usevar obj:active?>
+  <?usevar obj:irusr?>
+  <?usevar obj:iwusr?>
+  <?usevar obj:ixusr?>
+  <?usevar obj:irgrp?>
+  <?usevar obj:iwgrp?>
+  <?usevar obj:ixgrp?>
+  <?usevar obj:iroth?>
+  <?usevar obj:iwoth?>
+  <?usevar obj:ixoth?>
+
+  <?include admin/objdata/image_init.html?>
+  <?include admin/objdata/guide_init.html?>
+  <?include admin/objdata/ftp_init.html?>
+  <?include admin/objdata/music_init.html?>
+
+  <?exec catalog:saveobject?>
+  <?exec preferences:fetch '${cgi:uname}'?>
+  <?useobject ${cgi:oid}?>
+  <?defaultvalue obj:type 'link'?>
+  <?defaultvalue cgi:type ${obj:type}?>
+
+
+	<td width="500" rowspan="2" valign="top">
+	<div class="header">Object editor</div><br/>
+	<div class="boxheader"><b><?exec catalog:treeview?></b></div>
+
+
+	<div class="content">
+  
+	<form name="objectedit" method="POST" action="<?evar cgi:script_name ?>">
+		<input type="hidden" name="referer" value="<?evar cgi:http_referer?>">
+		<input type="hidden" name="oid"   	value="<?evar cgi:oid?>">
+		<input type="hidden" name="do"    	value="yes">
+		<input type="hidden" name="id"    	value="<?evar cgi:oid?>">
+		<input type="hidden" name="page"	value="<?evar cgi:page?>">
+
+		<table border="0">
+		<tr>
+			<th style="background-color: #615c75;">Name</th>
+		</tr><tr>
+			<td>
+				<input size="80" type="text" name="name" value="<?evar obj:name?>">
+			</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">Description</th>
+		</tr><tr>
+			<td>
+				<textarea rows="5" cols="80" name="description"><?evar obj:description?></textarea>
+			</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">
+				<?ifInclude {'${cgi:type}' eq 'link'} 		'admin/objecthelp/link.html'?>
+				<?ifInclude {'${cgi:type}' eq 'catalog'}	'admin/objecthelp/catalog.html'?>
+				<?ifInclude {'${cgi:type}' eq 'reference'}	'admin/objecthelp/reference.html'?>
+				<?ifInclude {'${cgi:type}' eq 'image'}		'admin/objecthelp/image.html'?>
+				<?ifInclude {'${cgi:type}' eq 'guide'}		'admin/objecthelp/guide.html'?>
+				<?ifInclude {'${cgi:type}' eq 'ftp'}		'admin/objecthelp/ftp.html'?>
+				<?ifInclude {'${cgi:type}' eq 'mp3'}		'admin/objecthelp/music.html'?>
+				<?ifInclude {'${cgi:type}' eq 'ogg'}		'admin/objecthelp/music.html'?>
+			</th>
+		</tr><tr>
+			<td>
+				<?ifInclude {'${cgi:type}' eq 'link'} 		'admin/objdata/default.html'?>
+				<?ifInclude {'${cgi:type}' eq 'catalog'}	'admin/objdata/default.html'?>
+				<?ifInclude {'${cgi:type}' eq 'reference'}	'admin/objdata/default.html'?>
+				<?ifInclude {'${cgi:type}' eq 'image'}		'admin/objdata/image.html'?>
+				<?ifInclude {'${cgi:type}' eq 'guide'}		'admin/objdata/guide.html'?>
+				<?ifInclude {'${cgi:type}' eq 'ftp'}		'admin/objdata/ftp.html'?>
+				<?ifInclude {'${cgi:type}' eq 'mp3'}		'admin/objdata/music.html'?>
+				<?ifInclude {'${cgi:type}' eq 'ogg'}		'admin/objdata/music.html'?>
+			</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">Parent</th>
+		</tr><tr>
+			<td>
+				<input type="hidden" name="parent" value="<?evar obj:parent?>">
+				<?evar obj:pathname?>
+				[<a href="#" onClick="return popupParentList('<?evar obj:parent?>')">select</a>]
+			</td>
+		</tr><tr>
+				<td>&nbsp;</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">Type</th>
+		</tr><tr>
+			<td>
+				<select name="type" onChange="javascript:return changeType()">
+					<option value=<?noescapevar flags:link?>>link</option>
+					<option value=<?noescapevar flags:cat?>>catalog</option>
+					<option value=<?noescapevar flags:ref?>>reference</option>
+					<option value=<?noescapevar flags:image?>>image</option>
+					<option value=<?noescapevar flags:guide?>>guide</option>
+					<option value=<?noescapevar flags:ftp?>>ftp address</option>
+					<option value=<?noescapevar flags:mp3?>>MP3 music file</option>
+					<option value=<?noescapevar flags:ogg?>>OGG music file</option>
+				</select>
+			<td>
+		</tr><tr>
+			<th style="background-color: #615c75;">&nbsp;</th>
+		</tr><tr>
+			<td>
+				<table border="0">
+				<tr>
+					<td align="left">
+						<input type="button" onClick="checkForDeleteObject()" value="save">
+					</td>
+					<td align="right">
+						<b>Set active:</b>
+						<input type="checkbox" name="active" <?noescapevar flags:active?>>
+					</td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		</table>
+	</form>
+	</div>
+
+	</td>
+	<?include table_end.html?>
+	
+</body>
+<?include footer/footer.html?>

@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+#( +--------------------------------------------------------+ )#
+
+use strict;
+use Giza;
+use Giza::Modules;
+

@@ -1,0 +1,43 @@
+#!/usr/bin/perl 
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+use strict;
+use CGI;
+use Giza;
+use Giza::Modules;
+
+#%ifdef DEBUG
+use CGI::Carp qw(fatalsToBrowser);
+#%endif
+
+chdir $Giza::PREFIX;
+my $query = new CGI;
+
+my($giza, $db, $user, $template, $object, $component, $objview) 
+	= giza_session(qw(db user objview));
+my $searchmod = $giza->config->{search}{module};
+
+$db->connect() or die $giza->error();
+
+
+my $idx; eval "
+	use $searchmod;
+	\$idx = ${searchmod}->new(giza => \$giza, user => \$user, db => \$db);
+"; die "$@\n" if $@;
+
+$idx->clear();
+my $objects = $objview->fetch(active=>1);
+foreach my $obj (@$objects) {
+	$idx->index($obj);
+}
+
+END {
+	$db->disconnect();
+}

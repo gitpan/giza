@@ -1,0 +1,34 @@
+<?header?>
+<?cv cgi:page?>
+<?usevars 'cgi' page uname pw?>
+<?include header/default.html?>
+<?defaultvalue cgi:status "Waiting for user?"?>
+
+<body>
+  <table border="0" width="500" align="center"><tr><td>
+  <div class="header">Please Login</div><br/>
+  <form method="POST" action="<?evar cgi:script_name?>">
+  <input type="hidden" name="page" value="<?evar cgi:page?>">
+  <table border="0">
+	<tr>
+		<th>Username</th>
+		<th>Password</th>
+		<th>&nbsp;</th>
+	</tr><tr>
+		<td><input type="text" 		name="uname" value="<?evar cgi:uname ?>"></td>
+		<td><input type="password"	name="pw"    value=""></td>
+		<td><input type="submit" 	value="login"></td>
+	</tr>
+  </table>
+  </form>
+
+  <table border=0>
+    <tr>
+		<th><small><small>Status:</small></small></th>
+		<td><small><small><?evar cgi:status?></small></small></td>
+	</tr>
+  </table>
+
+  </td></tr></table>
+</body>
+<?include footer/footer.html?>

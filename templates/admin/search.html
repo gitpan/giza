@@ -1,0 +1,48 @@
+<?set opt:get_component_values?>
+<?set opt:dont_recurse_refs?>
+<?usevar cgi:search?>
+<?getsession?>
+<?login?>
+<?header?>
+<?include header/default.html?>
+
+<?exec catalog:search '${cgi:search}'?>
+
+<body>
+	<?include table_start.html?>
+	<?include leftmenu.html?>
+	<td width="500" rowspan="2" valign="top">
+
+	<div class="header">Search Results</div><br/>
+
+
+	<div class="boxheader"><b><?exec catalog:treeview?></b></div>
+
+	<div class="description">
+		Search result(s) for: <b><?evar cgi:search?></b>
+	</div>
+	<br/>
+	
+
+	<div class="catalog">
+		<table border="0">
+		<tr>
+			<?exec catalog:directories?>
+		</tr>
+		</table>
+		<br/>
+		<?exec catalog:guides?>
+		<?exec catalog:images?>
+		<?exec catalog:ftps?>
+		<?exec catalog:mp3s?>
+		<?exec catalog:oggs?>
+		<?exec catalog:references?>
+		<?exec catalog:links?>
+	</div>
+	<br/>
+
+  </td>
+  <?include table_end.html?>
+</body>
+
+<?include footer/footer.html ?>

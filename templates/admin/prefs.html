@@ -1,0 +1,120 @@
+<?getsession?>
+<?set opt:convert_ugid_to_name?>
+<?set opt:no_object_cache?>
+<?set opt:dont_recurse_refs?>
+<?usevar cgi:page?>
+<?usevar cgi:oid?>
+<?usevar cgi:parent?>
+<?login?>
+
+  <?header ?>
+  <?include header/header.html?>
+  <?include header/title.html?>
+  <?include header/meta.html?>
+  <?include header/style.html?>
+  <?include header/end.html?>
+
+<body> 
+	<?include table_start.html?>
+	<?include leftmenu.html?>
+  <?usevar cgi:do?>
+  <?usevar prefs:cat_view?>
+  <?usevar prefs:cat_sort?>
+  <?usevar prefs:cat_active?>
+  <?usevar prefs:cat_recommended?>
+  <?usevar prefs:userlevel?>
+  <?usevar prefs:notepad?>
+  
+  <?exec preferences:save '${cgi:uname}'?>
+  <?exec preferences:fetch '${cgi:uname}'?>
+  
+	<td width="500" rowspan="2" valign="top">
+	<div class="header">Preferences</div><br/>
+
+	<div class="boxheader"><b><?exec catalog:treeview?></b></div>
+
+	<div class="content">
+  
+	<form name="objectedit" method="POST" action="<?evar cgi:script_name ?>">
+		<input type="hidden" name="do"    	value="yes">
+		<input type="hidden" name="page"	value="<?evar cgi:page?>">
+
+		<table border="0">
+		<tr>
+			<th style="background-color: #615c75;">View (Not implemented)</th>
+		</tr><tr>
+			<td>
+				<select name="cat_view">
+					<option value=<?noescapevar prefs:flag_cat_view_normal?>>Normal</option>
+					<option value=<?noescapevar prefs:flag_cat_view_list?>>Small List</option>
+					<option value=<?noescapevar prefs:flag_cat_view_detailed?>>Detailed</option>
+				</select>
+			</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">Sort by</th>
+		</tr><tr>
+			<td>
+				<select name="cat_sort">
+					<option value=<?noescapevar prefs:flag_cat_sort_name?>>Name</option>
+					<option value=<?noescapevar prefs:flag_cat_sort_changed?>>Changed</option>
+					<option value=<?noescapevar prefs:flag_cat_sort_type?>>Type</option>
+					<option value=<?noescapevar prefs:flag_cat_sort_id?>>Id</option>
+				</select>
+			</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">Active flag defaults to</th>
+		</tr><tr>
+			<td>
+				<select name="cat_active">
+					<option value=<?noescapevar prefs:flag_active_on?>>On</option>
+					<option value=<?noescapevar prefs:flag_active_off?>>Off</option>
+				</select>
+			</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">Recommended flag defaults to</th>
+		</tr><tr>
+			<td>
+				<select name="cat_recommended">
+					<option value=<?noescapevar prefs:flag_recommended_on?>>On</option>
+					<option value=<?noescapevar prefs:flag_recommended_off?>>Off</option>
+				</select>
+			</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">User level</th>
+		</tr><tr>
+			<td>
+				<select name="userlevel">
+					<option value=<?noescapevar prefs:flag_userlevel_novice?>>Novice</option>
+					<option value=<?noescapevar prefs:flag_userlevel_intermediate?>>Intermediate</option>
+					<option value=<?noescapevar prefs:flag_userlevel_expert?>>expert</option>
+				</select>
+			<td>
+		</tr><tr>
+		</tr><tr>
+			<th style="background-color: #615c75;">My personal notes</th>
+		</tr><tr>
+			<td>
+				<textarea rows="5" cols="80" name="notepad"><?evar prefs:notepad?></textarea>
+			</td>
+		</tr><tr>
+			<th style="background-color: #615c75;">&nbsp;</th>
+		</tr><tr>
+			<td>
+				<table border="0">
+				<tr>
+					<td align="left">
+						<input type="submit" value="save">
+					</td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		</table>
+	</form>
+	</div>
+
+	</td>
+	<?include table_end.html?>
+	
+</body>
+<?include footer/footer.html?>

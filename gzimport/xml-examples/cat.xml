@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<category_import>
+	<object type="directory">
+		<name>Psytrance</name>
+		<parent>id:1</parent>
+		<active>yes</active>
+		<description>Links to psychedelic trance sites.</description>
+		<keywords>psytrance, goa, music, electronic, hippies</keywords>
+	</object>
+
+	<object type="directory">
+		<name>Labels</name>
+		<parent>name:Psytrance</parent>
+		<active>yes</active>
+		<description>psytrance labels</description>
+	</object>	
+
+	<object type="link">
+		<name>Twisted Records</name>
+		<parent>name:Psytrance::Labels</parent>
+		<data>http://www.twisted.co.uk</data>
+		<active>yes</active>
+		<description>Psytrance label based in the U.K, run by famous trance/ambient act Simon Posford.</description>
+	</object>
+
+	<object type="link">
+		<name>Tip World</name>
+		<parent>name:Psytrance::Labels</parent>
+		<data>http://www.tipworld.co.uk</data>
+		<active>yes</active>
+		<description>Top notch U.K based psytrance label, always been the best!</description>
+	</object>
+	
+	<object type="directory">
+		<name>News</name>
+		<parent>name:Psytrance</parent>
+		<active>yes</active>
+		<description>Sites containing news on the psychedelic trance scene.</description>
+	</object>
+
+	<object type="link">
+		<name>Trance.net</name>
+		<parent>name:Psytrance::News</parent>
+		<data>http://www.trance.net</data>
+		<active>yes</active>
+		<rate>10</rate>
+		<description>Norwegian based news site containing reviews, party information and more. A must visit!</description>
+	</object>
+
+</category_import>

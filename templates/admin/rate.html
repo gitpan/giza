@@ -1,0 +1,41 @@
+<?requirevar 	cgi:oid		?>
+<?requirevar 	cgi:page	?>
+<?requirevar 	cgi:parent	?>
+<?usevar cgi:rate?>
+<?useobject ${cgi:oid}?>
+<?header?>
+
+<?include header/default.html?>
+<body>
+<table border="0" width="500" align="center"><tr><td>
+<div class="header">Rate This Object</div><br/>
+
+<div class="content">
+
+What do you think of '<?evar obj:name ?>'?<br/>&nbsp;<br/>
+
+<form method="post" action="<?evar cgi:script_name ?>">
+	<input type="hidden" name="oid"    value="<?evar cgi:oid  ?>">
+	<input type="hidden" name="page"   value="<?evar cgi:page ?>">
+	<input type="hidden" name="parent" value="<?evar cgi:parent ?>">
+	<b>(bad)</b>
+	<input type="radio"  name="rate" value="1">1&nbsp;
+	<input type="radio"  name="rate" value="2">2&nbsp;
+	<input type="radio"  name="rate" value="3">3&nbsp;
+	<input type="radio"  name="rate" value="4">4&nbsp;
+	<input type="radio"  name="rate" value="5">5&nbsp;
+	<input type="radio"  name="rate" value="6">6&nbsp;
+	<input type="radio"  name="rate" value="7">7&nbsp;
+	<b>(good)</b>
+	<input type="submit" value="rate">
+</form>
+
+<?exec catalog:storerate ?>
+
+<br/>
+<a href="<?evar cgi:http_referer?>">Back</a><br/>
+</div><br/>
+
+</td></tr></table>
+</body>
+<?include footer/footer.html ?>

@@ -1,0 +1,28 @@
+sub parseconfig {
+    my($self) = @_;
+    unless(open CF, $Giza::CONFIGFILE) {
+        $self->error("Couldn't open configfile '$Giza::CONFIGFILE': $!");
+        exit 1;
+    }
+
+    my $cf = undef; {
+        local $/ = undef;
+        $cf = <CF>;
+    }
+    $cf =~ s/\n/ /g;
+    $cf =~ s/\s+/ /g;
+
+    my %config = ();
+    while($cf =~ s/([\w\d_-]+)\s*{(.*?)}//) {
+        my($name, $content) = ($1, $2);
+        foreach my $line (split /\;/, $content) {
+            $line =~ s/^\s+//;
+            $line =~ s/\s+$//;
+            my($key, $value) = split(/\s+/, $line, 2);
+            if(defined $key) {
+                $config{$name}{$key} = $value;
+            }
+        }
+    }
+    return \%config;
+}

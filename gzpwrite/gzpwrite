@@ -1,0 +1,192 @@
+#!/usr/bin/perl
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+# gzpwrite - write static giza pages.
+# (c) 1996-2002 ABC Startsiden AS, see the file AUTHORS.
+#
+# See the file LICENSE in the Giza top source distribution tree for
+# licensing information. If this file is not present you are *not*
+# allowed to view, run, copy or change this software or it's sourcecode.
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+#####
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+#( +--------------------------------------------------------+ )#
+
+use strict;
+use CGI;
+use Giza;
+use Giza::Modules;
+use Fcntl;
+use vars qw($ERRMSG $opt_q $opt_i $opt_t $opt_o @fetch $myself);
+
+
+# ### prototypes
+sub getopts($$);
+sub get_all_catalogs($$$);
+sub usage;
+
+($myself = $0) =~ s%.*/%%;
+
+# start with the top catalog if not defined.
+$opt_i = G_CAT_TOP;
+
+getoptions(\@ARGV) or die usage;
+die usage unless $opt_o;
+
+# ### redirect messages to /dev/null if quiet.
+if($opt_q) {
+	if(open(NULL, '>/dev/null')) {
+		*STDERR = *NULL;
+	}
+}
+
+#( +--------------------------------------------------------+ )#
+
+# ### Create our "Giza session"
+
+my($giza, $db, $user, $template)
+	= giza_session(qw(db user template));
+
+my $query = new CGI;
+my $page  = $giza->config->{template}{"index"};
+
+$template->cgi($query);
+$template->page($query);
+$template->never_send_header;
+
+if($opt_t) { # User defined custom template from cmd line.
+	$giza->config->{global}{template_dir} = $opt_t;
+}
+
+$db->connect or die perror(seterr($giza->error));
+
+# ### Create the root directory if it doesn't exist:
+if(not -d $opt_o and not mkdir $opt_o) {
+	die perror(seterr("Couldn't create root directory: $!"));
+}
+
+# ### Get all catalogues below G_CAT_TOP
+my @cataloq = ();
+get_all_catalogs($db, $opt_i, \@cataloq) or die perror();
+
+if($opt_i == G_CAT_TOP) {
+	create_file_from_expr(undef, G_CAT_TOP, "./$opt_o/") or die perror();
+}
+
+# ### create the pages and catalogues.
+foreach my $aref (@cataloq) {
+	my($name, $oid) = @$aref;
+	# Remove the catalog top (root dir) from the name.
+	$name =~ s/^(.+?):://;
+	my $dirname = create_dir_from_expr($name) or die perror();
+	create_file_from_expr($name, $oid, $dirname) or die perror();
+}
+
+END {
+	$db->disconnect if $db->connected;
+}
+
+#( +--------------------------------------------------------+ )#
+
+sub create_dir_from_expr
+{
+	my($name) = @_;
+	my $dirname = Giza::Template::expr_to_path($opt_o.'/'.$name);
+	if(not -d $dirname and not mkdir $dirname) {
+		return seterr("Couldn't create directory '$dirname': $!");
+	}
+	return $dirname;
+}
+
+sub create_file_from_expr
+{
+	my($name, $oid, $outdir) = @_;	
+
+	my $page = $giza->config->{template}{"index"};
+	my $dirindex = $giza->config->{global}{directoryindex} ||= 'index.html';
+	$template->parent($oid);
+	
+	my $filename = $outdir. '/'. $dirindex;
+	pwarn("$name => $filename");
+	my $fh = $giza->safeopen($filename, O_CREAT|O_WRONLY|O_TRUNC);
+	return seterr("Couldn't create $filename: $!") unless $fh;
+	{
+		select $fh; 
+		local *STDOUT = *$fh;
+		$template->setvar("pwrite", "xpath", $name);
+		$template->setvar("pwrite", "path",  Giza::Template::expr_to_path($name));
+		eval 'print $template->do($page)';
+		print STDERR $@ if $@;
+	}
+	close  $fh;
+}
+
+
+sub printl
+{
+	print @_, "\n"
+}
+
+sub getoptions($)
+{
+	my($argv) = @_;
+	return undef unless scalar @$argv;
+	
+	while($_ = shift @$argv) {
+		if(/-t$/ or /--template$/) {
+			$opt_t = shift @$argv;
+		}
+		elsif(/-i$/ or /--oid$/) {
+			$opt_i = shift @$argv;
+		}
+		elsif(/-q$/ or /--quiet$/) {
+			$opt_q = 1;
+		}
+		else {
+			$opt_o = $_;
+		}
+	} TRUE;
+}
+
+sub get_all_catalogs($$$)
+{
+	my($db, $oid, $aref) = @_;
+
+	my $query = qq{SELECT id,name FROM catalog WHERE parent=$oid AND type='catalog'};
+	my $sth = $db->query($query) or return seterr($giza->error);
+	while(my $h_res = $db->fetchrow_hash($sth)) { 
+		my $name = $db->expr_by_id($oid). '::'. $h_res->{name};
+		push @$aref, [$name, $h_res->{id}];
+		get_all_catalogs($db, $h_res->{id}, $aref) if $h_res->{id};
+	}
+	return 1;
+}
+
+sub perror
+{
+	print STDERR "Error: $main::ERRMSG\n";
+}
+
+
+sub pwarn
+{
+	printf STDERR "%s\n", shift;
+}
+
+sub seterr
+{
+	$ERRMSG=shift;
+	return undef
+}
+
+sub usage
+{
+	sprintf("Usage: %s [-r|-q] [-t templatedir] [-i start-from-oid] outdir\n", $myself);
+}

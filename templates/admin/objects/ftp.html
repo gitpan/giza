@@ -1,0 +1,11 @@
+<!-- link object -->
+<img src="/gfx/stylish/ftp.png" alt="" border="0"/>
+<a href="ftp://<?evar ftp:username?>:<?evar ftp:password?>@<?evar ftp:host?>:<?evar ftp:port?>/<?evar ftp:directory?>"><?evar obj:name ?></a>
+	<b><?evar obj:showrate ?></b>/<?evar obj:total_votes?>
+
+<br/>
+<?evar obj:description ?><br/>
+<a href="<?evar cgi:script_name?>?page=rate.html&amp;parent=<?evar giza:parent?>&amp;oid=<?evar obj:id?>"><img src="/gfx/rate16.gif" alt="[r]" border="0"/></a>
+<a href="<?evar cgi:script_name?>?page=admin/object.html&amp;oid=<?evar obj:id?>&amp;parent=<?evar obj:parent?>"><img src="/gfx/edit.gif" alt="[e]" border="0"/></a>
+<a href="<?evar cgi:script_name?>?page=admin/object.html&amp;action=new&amp;parent=<?evar giza:parent?>"><img src="/gfx/new.gif" alt="[n]" border="0"></a>
+<br/>&nbsp;<br/>

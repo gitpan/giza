@@ -1,0 +1,25 @@
+<?storeproperties guide?>
+<?usevar guide:mail?>
+<?usevar guide:homepage?>
+<?usevar guide:image?>
+
+<ol>
+	<table border="0">
+	<tr>
+		<th>Mail Address</th>
+		<th>Homepage</th>
+		<th>Image</th>
+	</tr><tr>
+		<td><input type="text" name="mail" value="<?evar guide:mail?>"></td>
+		<td><input type="text" name="homepage" value="<?evar guide:homepage?>"></td>
+		<td><input type="text" name="image" value="<?evar guide:image?>"></td>
+	</tr><tr>
+		<th>Image preview</th>
+	</tr><tr>
+		<td><img src="<?evar guide:image?>" border="1"></td>
+	</tr>
+	</table>
+</ol>
+
+<?joinproperties guide obj data?>
+<input type="hidden" name="data" value="<?evar obj:data?>">

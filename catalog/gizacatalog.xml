@@ -1,0 +1,561 @@
+<?xml version="1.0"?>
+<category_import>
+	<object type="catalog">
+		<name>Music</name>
+		<parent>name:root</parent>
+		<active>yes</active>
+		<description>sites about music</description>
+		<created>2002-03-22 17:13:11+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Electronic</name>
+		<parent>name:root::Music</parent>
+		<active>yes</active>
+		<description>Sites on Electronic music of all sorts.</description>
+		<created>2002-04-15 14:19:11+02</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Psytrance</name>
+		<parent>name:root::Music::Electronic</parent>
+		<active>yes</active>
+		<description>Links to psychedelic trance sites.</description>
+		<created>2002-04-15 14:19:35+02</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>COMA Records</name>
+		<parent>name:root::Music::Electronic::Psytrance</parent>
+		<active>yes</active>
+		<description>Site about thee danish label COMA Records that had an big influence on the electronic dance music scene in the 1990s.</description>
+		<data>http://www.geocities.com/SunsetStrip/Palms/5558/main.htm</data>
+		<created>2002-03-22 17:02:58+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Labels</name>
+		<parent>name:root::Music::Electronic::Psytrance</parent>
+		<active>yes</active>
+		<description>psytrance labels</description>
+		<created>2002-02-18 15:44:39+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Twisted Records</name>
+		<parent>name:root::Music::Electronic::Psytrance::Labels</parent>
+		<active>yes</active>
+		<description>Psytrance label based in the U.K, run by famous trance/ambient act Simon Posford.</description>
+		<data>http://www.twisted.co.uk</data>
+		<created>2002-03-21 12:08:28+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Tip World</name>
+		<parent>name:root::Music::Electronic::Psytrance::Labels</parent>
+		<active>yes</active>
+		<description>Top notch U.K based psytrance label, always been the best!</description>
+		<data>http://www.tipworld.co.uk</data>
+		<created>2002-03-22 16:51:58+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+		<template>objects/tipworld.html</template>
+	</object>
+
+	<object type="catalog">
+		<name>News</name>
+		<parent>name:root::Music::Electronic::Psytrance</parent>
+		<active>yes</active>
+		<description>Sites containing news on the psychedelic trance scene.</description>
+		<created>2002-02-18 15:44:39+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>psynews</name>
+		<parent>name:root::Music::Electronic::Psytrance::News</parent>
+		<active>yes</active>
+		<description>good international psytrance news site.</description>
+		<data>http://www.psynews.org</data>
+		<created>2002-03-22 10:17:22+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Trance.net</name>
+		<parent>name:root::Music::Electronic::Psytrance::News</parent>
+		<active>yes</active>
+		<description>Norwegian based news site containing reviews, party information and more. A must visit!</description>
+		<data>http://www.trance.net</data>
+		<created>2002-03-22 10:24:49+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>News</name>
+		<parent>name:root::Music::Electronic</parent>
+		<active>yes</active>
+		<description>News, e-zines, etc.</description>
+		<created>2002-04-15 14:20:25+02</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Mixmag</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>Online version of the dance music and club culture magazine. Contains news, reviews, club guides, reviews, archives and new releases.</description>
+		<data>http://www.mixmag.net</data>
+		<created>2002-04-15 14:26:43+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Disquiet</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>Contains articles, interviews, reviews, audio games, and links of interest for ambient and electronica music fans.</description>
+		<data>http://www.disquiet.com</data>
+		<created>2002-04-15 14:27:07+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Pelicanneck</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>List with new releases within the electronica, lo-fi and experiemental genres.</description>
+		<data>http://www.pelicanneck.com/Pages/welcome.html</data>
+		<created>2002-04-15 14:21:16+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Urbansounds</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>Good e-zine on electronic music.</description>
+		<data>http://www.urbansounds.com/</data>
+		<created>2002-04-15 14:23:22+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Krass</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>Offers information on electronica, including party dates in the UK and Germany. Also includes archives and photo galleries.</description>
+		<data>http://www.krass.com</data>
+		<created>2002-04-15 14:24:09+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Electronic Pulse</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>A directory of electronica, IDM, ambient, trance and house links and forums.</description>
+		<data>http://www.electronicpulse.com</data>
+		<created>2002-04-15 14:24:38+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Chilled Beats</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>Offers information and reviews on new electronica and downtempo albums.</description>
+		<data>http://www.chiledbeats.org</data>
+		<created>2002-04-15 14:25:26+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Burn it Blue</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>Music and clubbing resource, covering various genres such as house, garage, drum and bass, trance, beats and breaks. Includes news, reviews, sound files, and a gig guide.</description>
+		<data>http://www.burnitblue.com</data>
+		<created>2002-04-15 14:25:52+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Gridface</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>E-zine featuring reviews of electronic music, photos, and abstract artwork by Jacob Arnold.</description>
+		<data>http://www.gridface.com</data>
+		<created>2002-04-15 14:27:27+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Wetworks E-Zine</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>An electronica and industrial music e-zine with interviews, reviews and downloads (MP3 format).</description>
+		<data>http://www.wetworksezine.com</data>
+		<created>2002-04-15 14:28:12+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Grooves</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>Online version of the print magazine, offering news, reviews and interviews related to experimental electronic music.</description>
+		<data>http://www.groovesmag.com</data>
+		<created>2002-04-15 14:28:36+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Lunar Magazine</name>
+		<parent>name:root::Music::Electronic::News</parent>
+		<active>yes</active>
+		<description>Feature articles, interviews, reviews, and music downloads (RealAudio).</description>
+		<data>http://www.lunarmagazine.com</data>
+		<created>2002-04-15 14:29:07+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Shops</name>
+		<parent>name:root::Music::Electronic</parent>
+		<active>yes</active>
+		<description>Get your records here.</description>
+		<created>2002-04-15 14:22:01+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Boomkat</name>
+		<parent>name:root::Music::Electronic::Shops</parent>
+		<active>yes</active>
+		<description>Recordshop that trades all kinds of electronica, IDM, lo-fi etc.</description>
+		<data>http://www.boomkat.com/</data>
+		<created>2002-04-15 14:22:42+02</created>
+		<changed>2002-04-15 14:33:50+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Rock</name>
+		<parent>name:root::Music</parent>
+		<active>yes</active>
+		<description>Links to rock related sites.</description>
+		<created>2002-04-15 15:19:49+02</created>
+		<changed>2002-04-15 15:19:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>RollingStone</name>
+		<parent>name:root::Music::Rock</parent>
+		<active>yes</active>
+		<description>Rock&amp;Roll magazine</description>
+		<data>http://www.rollingstone.com</data>
+		<created>2002-03-25 14:54:04+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Bands</name>
+		<parent>name:root::Music::Rock</parent>
+		<active>yes</active>
+		<description>Links to Rock bands</description>
+		<created>2002-03-19 15:07:45+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Norway</name>
+		<parent>name:root::Music::Rock::Bands</parent>
+		<active>yes</active>
+		<description>Norwegian Bands</description>
+		<created>2002-03-24 21:03:50+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Trondheim</name>
+		<parent>name:root::Music::Rock::Bands::Norway</parent>
+		<active>yes</active>
+		<description>Trondheim based bands.</description>
+		<created>2002-03-24 21:04:14+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Pekka Volt</name>
+		<parent>name:root::Music::Rock::Bands::Norway::Trondheim</parent>
+		<active>yes</active>
+		<description>Official Homepage</description>
+		<data>http://www.pekkavolt.com</data>
+		<created>2002-03-24 21:05:29+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+		<sort>-10</sort>
+	</object>
+
+	<object type="link">
+		<name>Heges Pekka Volt page</name>
+		<parent>name:root::Music::Rock::Bands::Norway::Trondheim</parent>
+		<active>yes</active>
+		<description>Site with pictures, discography, reviews etc. </description>
+		<data>http://home.no.net/puzt/indexPV.htm</data>
+		<created>2002-03-24 21:05:55+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Gåte</name>
+		<parent>name:root::Music::Rock::Bands::Norway::Trondheim</parent>
+		<active>yes</active>
+		<description>They play folk, with synth and guitar. good!</description>
+		<data>http://www.gaate.no</data>
+		<created>2002-03-24 21:08:31+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Progress Records</name>
+		<parent>name:root::Music::Rock::Bands::Norway::Trondheim</parent>
+		<active>yes</active>
+		<description>Yeah. Finest there is.</description>
+		<data>http://www.records.no/progress/</data>
+		<created>2002-03-24 21:10:02+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>The Strokes</name>
+		<parent>name:root::Music::Rock::Bands</parent>
+		<active>yes</active>
+		<description>The latest hype in the rock world</description>
+		<data>http://www.thestrokes.com</data>
+		<created>2002-02-19 12:36:02+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>The Ramones</name>
+		<parent>name:root::Music::Rock::Bands</parent>
+		<active>yes</active>
+		<description>The Ramones was started in New York in 1974. They were under heavy influence of bands like
+the New York Dolls, the Stooges etc. Their two first albums are classics and gave massive inspiration to the punk rock scene.</description>
+		<created>2002-04-19 15:49:59+02</created>
+		<changed>2002-04-19 15:49:59+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Blitzkriegs psycho therapy bop.</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>Finnish fan site. Warning: Contains poor language.</description>
+		<data>http://www.kauhajoki.fi/~jplaitio/ramones.html</data>
+		<created>2002-04-19 15:52:44+02</created>
+		<changed>2002-04-19 15:52:44+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Ramones Online</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>Good ramones dedicated site. Contains a lot of information on all band members. The site was formerly known as "This ain't havana".</description>
+		<data>http://www.ramonesonline.com/</data>
+		<created>2002-04-19 15:53:50+02</created>
+		<changed>2002-04-19 15:53:50+02</changed>
+	</object>
+
+	<object type="image">
+		<name>Joey and Johnny Live</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>Joey and Johnny playing live.</description>
+		<data>image http://giza2.intra/img/ramones/2x.jpg thumbnail http://giza2.intra/img/ramones/tn_2x.jpg</data>
+		<created>2002-04-19 16:18:50+02</created>
+		<changed>2002-04-19 16:18:50+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Ramones</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>Famous U.S punk band aside with the New York Dolls etc.</description>
+		<data>http://www.officialramones.com</data>
+		<created>2002-04-19 15:32:27+02</created>
+		<changed>2002-04-19 15:32:27+02</changed>
+	</object>
+
+	<object type="image">
+		<name>Press photo of the band.</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>Press photo of the band.</description>
+		<data>image http://giza2.intra/img/ramones/6-95.jpg thumbnail http://giza2.intra/img/ramones/tn_6-95.jpg</data>
+		<created>2002-04-19 16:18:50+02</created>
+		<changed>2002-04-19 16:18:50+02</changed>
+	</object>
+
+	<object type="image">
+		<name>Original Ramones in Queens '76.</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>Original Ramones in Queens '76</description>
+		<data>image http://giza2.intra/img/ramones/76.jpg thumbnail http://giza2.intra/img/ramones/tn_76.jpg</data>
+		<created>2002-04-19 16:18:50+02</created>
+		<changed>2002-04-19 16:18:50+02</changed>
+	</object>
+
+	<object type="image">
+		<name>Johnny Ramone and Johnny Rotten meet.</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>See image for description.</description>
+		<data>image http://giza2.intra/img/ramones/81.jpg thumbnail http://giza2.intra/img/ramones/tn_81.jpg</data>
+		<created>2002-04-19 16:18:50+02</created>
+		<changed>2002-04-19 16:18:50+02</changed>
+	</object>
+
+	<object type="image">
+		<name>They Lay Down The Law</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>See image for description.</description>
+		<data>image http://giza2.intra/img/ramones/theyla.jpg thumbnail http://giza2.intra/img/ramones/tn_theyla.jpg</data>
+		<created>2002-04-19 16:18:50+02</created>
+		<changed>2002-04-19 16:18:50+02</changed>
+	</object>
+
+	<object type="image">
+		<name>Live!</name>
+		<parent>name:root::Music::Rock::Bands::The Ramones</parent>
+		<active>yes</active>
+		<description>See image for description.</description>
+		<data>image http://giza2.intra/img/ramones/thepic.jpg thumbnail http://giza2.intra/img/ramones/tn_thepic.jpg</data>
+		<created>2002-04-19 16:18:51+02</created>
+		<changed>2002-04-19 16:18:51+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Swing</name>
+		<parent>name:root::Music</parent>
+		<active>yes</active>
+		<description>Swing, Bigband, ++</description>
+		<created>2002-04-16 16:43:21+02</created>
+		<changed>2002-04-16 16:43:21+02</changed>
+	</object>
+
+	<object type="link">
+		<name>The Count Basie Orchestra</name>
+		<parent>name:root::Music::Swing</parent>
+		<active>yes</active>
+		<description>A little page on Count Basie, with a few links.</description>
+		<data>http://www.duke.edu/~ymm/basi.html</data>
+		<created>2002-04-16 16:44:30+02</created>
+		<changed>2002-04-16 16:44:30+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Benny Goodman</name>
+		<parent>name:root::Music::Swing</parent>
+		<active>yes</active>
+		<description>Benny Goodman page by David Mulliss. Really good site with discography, biography, photos and a lot more.</description>
+		<data>http://www.davidmulliss.com.au/BennyGoodman/</data>
+		<created>2002-04-16 16:46:54+02</created>
+		<changed>2002-04-16 16:46:54+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Helen Forrest</name>
+		<parent>name:root::Music::Swing</parent>
+		<active>yes</active>
+		<description>Helen Forrest page by David Mulliss. Really good page with discography, biography and a lot more!</description>
+		<data>http://www.davidmulliss.com.au/HelenForrest/</data>
+		<created>2002-04-16 16:48:01+02</created>
+		<changed>2002-04-16 16:48:01+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Artie Shaw</name>
+		<parent>name:root::Music::Swing</parent>
+		<active>yes</active>
+		<description>A good site with a lot of information on Artie Shaw; the man, the clarinetist, the movie star, the author, and the bandleader.</description>
+		<created>2002-04-16 16:49:15+02</created>
+		<changed>2002-04-16 16:49:15+02</changed>
+	</object>
+
+	<object type="guide">
+		<name>Ask Solem Hoel</name>
+		<parent>name:root::Music</parent>
+		<active>yes</active>
+		<description>He's not only a frustrated music lover, not knowing where to settle, but also a psychotic programmer for ABC Startsiden.</description>
+		<data>mail ask@startsiden.no homepage http://www.unixmonks.net image http://www.startsiden.no/static/images/medarbeidere/ask.jpg</data>
+		<created>2002-04-19 16:36:16+02</created>
+		<changed>2002-04-19 16:36:16+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Technews</name>
+		<parent>name:root</parent>
+		<active>yes</active>
+		<description>International tech news.</description>
+		<created>2002-03-22 18:07:51+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Slashdot</name>
+		<parent>name:root::Technews</parent>
+		<active>yes</active>
+		<description>News for nerds stuff that matters !</description>
+		<data>http://www.slashdot.org</data>
+		<created>2002-03-22 17:14:18+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+		<sort>10</sort>
+		<template>objects/slashdot.html</template>
+	</object>
+
+	<object type="catalog">
+		<name>BSD</name>
+		<parent>name:root::Technews</parent>
+		<active>yes</active>
+		<description>All things *BSD related.</description>
+		<created>2002-03-25 14:04:06+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="catalog">
+		<name>Linux</name>
+		<parent>name:root::Technews</parent>
+		<active>yes</active>
+		<description>The open source Operating System of choice for the Gnu generation ?!</description>
+		<created>2002-03-25 14:05:33+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>rootprompt</name>
+		<parent>name:root::Technews</parent>
+		<active>yes</active>
+		<description>Stuff and articles for sysadmins.</description>
+		<data>http://www.rootprompt.org</data>
+		<created>2002-03-22 18:07:09+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+	<object type="link">
+		<name>Kur05hin</name>
+		<parent>name:root::Technews</parent>
+		<active>yes</active>
+		<description>News for nerds, deeper thoughts and stuff !</description>
+		<data>http://www.kuro5hin.org</data>
+		<created>2002-03-22 11:43:31+01</created>
+		<changed>2002-04-15 14:33:49+02</changed>
+	</object>
+
+</category_import>

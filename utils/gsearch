@@ -1,0 +1,51 @@
+#!/usr/bin/perl 
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+use strict;
+use CGI;
+use Giza;
+use Giza::Modules;
+
+#%ifdef DEBUG
+use CGI::Carp qw(fatalsToBrowser);
+#%endif
+
+chdir $Giza::PREFIX;
+
+die "Usage: $0 '<search string>'\n" unless @ARGV;
+my $pat = join(" ", @ARGV);
+
+my $query = new CGI;
+
+my($giza, $db, $user, $template, $object, $component, $objview) 
+	= giza_session(qw(db user object objview));
+my $searchmod = $giza->config->{search}{module};
+
+$db->connect() or die $giza->error();
+
+
+my $idx; eval "
+	use $searchmod;
+	\$idx = ${searchmod}->new(giza => \$giza, user => \$user, db => \$db);
+"; die "$@\n" if $@;
+
+my $objects = $idx->search($object, $pat);
+foreach my $obj (@$objects) {
+	printf("ID: %d\n", $obj->id) if $obj->id;
+	printf("Name: %s\n", $obj->name) if $obj->name;
+	printf("Description:\n%s\n", $obj->description) if $obj->description;
+	printf("Data: %s\n", $obj->data) if $obj->data;
+	printf("Keywords:\n%s\n", $obj->keywords) if $obj->keywords;
+	print "\n";
+}
+
+END {
+	$db->disconnect();
+}

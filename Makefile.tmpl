@@ -1,0 +1,116 @@
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+# Makefile.tmpl - giza makefile
+# (c) 1996-2002 ABC Startsiden AS, see the file AUTHORS.
+#
+# See the file LICENSE in the Giza top source distribution tree for
+# licensing information. If this file is not present you are *not*
+# allowed to view, run, copy or change this software or it's sourcecode.
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+#####
+
+#%include "config.pimpx"
+
+#%ifdef PERL
+#%  print PERL=%{PERL}
+#%endif
+#%ifdef PERLFLAGS
+#%  print PERLFLAGS=%{PERLFLAGS}
+#%endif
+#%ifdef PREFIX
+#%  print PREFIX=%{PREFIX}
+#%endif
+#%ifdef PIMPX
+#%  print PIMPX=%{PIMPX}
+#%endif
+#%ifdef WEBUSER
+#%  print WEBUSER=%{WEBUSER}
+#%endif
+#%ifdef WEBGROUP
+#%  print WEBGROUP=%{WEBGROUP}
+#%endif
+#%ifdef DBTYPE
+#%  print DBTYPE=%{DBTYPE}
+#%endif
+
+BIN_UTILS=	utils/makecryptpw utils/g_dumpconfig ./console.pl gzimport/gzimport utils/sessionls \
+			utils/expiresessions gzexport/gzexport gzpwrite/gzpwrite tester/tester utils/ginit_search \
+			utils/gindex_all utils/gsearch utils/gfunctest cronjobs/session_expire
+
+SBIN_UTILS=	gzlogd/gzlogd
+
+WEB=		cgi/printenv.pl cgi/browse.pl cgi/forward.pl
+
+GFX=		cgi/gfx/*
+
+TEMPLATES=	templates/
+
+INCLUDE=	include/Giza.pm include/Version.pm include/Giza/Modules.pm include/Giza/Component.pm \
+			include/Giza/DB.pm include/Giza/ObjView.pm include/Giza/Object.pm \
+			include/Giza/Template.pm include/Giza/User.pm include/Giza/User/SDB.pm \
+			include/Giza/Handler/Forward/ClickDB.pm include/Giza/Search/OpenFTS.pm \
+			include/Giza/Template/FuncLoader.pm \
+			include/Giza/Template/Function/Catalog.pm \
+			include/Giza/Template/Function/TestClass.pm \
+			include/Giza/Template/Function/User.pm \
+			include/Giza/Template/Function/Group.pm \
+			include/Giza/Template/Function/Preferences.pm 
+			
+
+COMPONENTS=	include/Giza/Component/Rate.pm
+
+CONFIG=		etc/gizaconfig.xml
+
+.EXPORT_ALL_VARIABLES:
+
+# --------------------------------------------------------------------------------- #
+
+all: build
+
+install: all create_dirs copy_bin_files copy_include_files copy_config copy_templates copy_gfx create_db
+
+upgrade: all create_dirs copy_bin_files copy_include_files
+
+build: $(BIN_UTILS) $(SBIN_UTILS) $(WEB) $(INCLUDE) $(COMPONENTS) $(CONFIG)
+	bash helpers/mkBUILD.sh
+	for file in $?; do $(PIMPX) -I. $$file -OBUILD/$$file; done
+
+create_dirs:
+	bash helpers/mkPREFIX.sh $(PREFIX)
+	test -d $(PREFIX)/var 		|| mkdir $(PREFIX)/var
+	test -d $(PREFIX)/var/db 	|| mkdir $(PREFIX)/var/db
+	test -d $(PREFIX)/var/log 	|| mkdir $(PREFIX)/var/log
+	test -d $(PREFIX)/var/run	|| mkdir $(PREFIX)/var/run
+	test -d $(PREFIX)/bin		|| mkdir $(PREFIX)/bin
+	chown $(WEBUSER).$(WEBGROUP) $(PREFIX)/var/db
+	chmod 755 $(PREFIX)/var/db
+
+copy_bin_files: $(BIN_UTILS) $(SBIN_UTILS) $(WEB) 
+	for file in $?; do cp -f BUILD/$$file $(PREFIX)/$$file; chmod 755 $(PREFIX)/$$file; ln -sf $(PREFIX)/$$file $(PREFIX)/bin; done
+
+copy_include_files: $(INCLUDE) $(COMPONENTS)
+	for file in $?; do cp -f BUILD/$$file $(PREFIX)/$$file; chmod 644 $(PREFIX)/$$file; done
+
+copy_config: $(CONFIG)
+	for file in $?; do cp BUILD/$$file $(PREFIX)/$$file; chmod 644 $(PREFIX)/$$file; done
+
+copy_templates: 
+	cp -rf templates $(PREFIX)/
+
+copy_gfx: 
+	cp -rf cgi/gfx $(PREFIX)/cgi/
+
+create_db:
+	$(PIMPX) helpers/mktables.pimpx -OBUILD/MKTABLES
+	$(PERL) $(PERLFLAGS) BUILD/MKTABLES $(DBTYPE)
+
+
+distclean: clean
+	rm -f config.cache
+	rm -f config.pimpx
+	rm -f Makefile
+
+clean:
+	rm -rf BUILD/
+
+
+

@@ -1,0 +1,44 @@
+<?header?>
+<?set opt:get_component_values?>
+<?set opt:use_custom_templates?>
+<?include header/default.html?>
+
+<?exec catalog:get "parent=&gt;${giza:parent}, active=&gt;1"?>
+
+<body>
+	<table width="500" align="center" border="0"><tr><td>
+	<div class="header"><?evar parent:name?></div><br/>
+	<div class="catalog"><b><?exec catalog:treeview?></b></div><br/>
+	<?exec catalog:guide 'parent=&gt;${giza:parent}'?>
+	<div class="description"><?evar parent:description?></div><br/>
+	
+
+	<div class="catalog">
+		<table border="0">
+		<tr>
+			<?exec catalog:directories?>
+		</tr>
+		</table>
+		<br/>
+		<table bgcolor="#333333" border="1" cols="4">
+		<tr>
+			<?exec catalog:images?>
+		</tr>
+		</table><br/>
+		<?exec catalog:links?>
+	</div>
+	<br/>
+
+	<div class="catalog">
+		<form method="POST" action="/dForDynamic/browse.pl">
+			<input type="hidden" name="page"   value="search.html">
+			<input type="text"   name="search" value="">
+			<input type="submit" name=""       value="search">
+		</form>
+	</div><br/>
+
+	<?include footer/info.html?>
+	</td></tr></table>
+</body>
+
+<?include footer/footer.html ?>

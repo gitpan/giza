@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+use strict;
+use DBI;
+
+#%include <config.pimpx>
+#%print my $DBTYPE="%{DBTYPE}";
+#%print my $DBNAME="%{DBNAME}";
+#%print my $DBUSER="%{DBUSER}";
+#%print my $DBPASS="%{DBPASS}";
+#%print my $DBHOST="%{DBHOST}";
+#%print my $PIMPX="%{PIMPX}";
+
+my %dsn = (
+		postgres	=> "dbi:Pg:dbname=$DBNAME",
+		mysql		=> "dbi:mSQL:database=$DBNAME=$DBHOST",
+		db2			=> "dbi:DB2:$DBNAME",
+		msql		=> "dbi:mSQL:database=$DBNAME:host=$DBHOST",
+);
+
+my $dbh = DBI->connect($dsn{$DBTYPE}, $DBUSER, $DBPASS)
+	or die "Couldn't connect to db: $DBI::errstr\n";
+
+my $sqldir = "./sql/$DBTYPE";
+opendir(SQLDIR, $sqldir) or die "Couldn't open $sqldir: $!";
+my @files = (); {
+	while(my $file = readdir(SQLDIR)) {
+		$file = "$sqldir/$file";
+		push(@files, $file) if -f $file;
+	}
+}
+		
+foreach my $file (sort {$a <=> $b || $a cmp $b} @files) {
+	print "${file}:\n";
+	open(FILE, "$PIMPX $file|") or die "Couldn't open $file: $!";
+	my $sqldata; {
+		local $/ = undef;
+		$sqldata = <FILE>;
+	}
+	close FILE;
+	my $sth = $dbh->prepare($sqldata);
+	$sth->execute();
+}
+closedir(SQLDIR);
+
+$dbh->disconnect;
+

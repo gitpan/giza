@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<category_import>
+	<object type="ref">
+		<name>ref til ref til Rock:)</name>
+		<parent>name:Psytrance::Labels</parent>
+		<active>yes</active>
+		<data>name:Psytrance::Rock</data>
+		<description>ref</description>
+	</object>	
+</category_import>

@@ -1,0 +1,190 @@
+<?getsession?>
+<?usevar cgi:page?>
+<?usevar cgi:oid?>
+<?login?>
+
+  <?usevar cgi:action?>
+  <?usevar cgi:referer?>
+  <?usevar cgi:do?>
+  <?usevar cgi:details?>
+  <?usevar obj:name?>
+  <?usevar obj:type?>
+  <?usevar obj:data?>
+  <?usevar obj:keywords?>
+  <?usevar obj:description?>
+  <?usevar obj:parent?>
+  <?usevar obj:owner?>
+  <?usevar obj:groupo?>
+  <?usevar obj:sort?>
+  <?usevar obj:template?>
+  <?usevar obj:active?>
+  <?usevar obj:irusr?>
+  <?usevar obj:iwusr?>
+  <?usevar obj:ixusr?>
+  <?usevar obj:irgrp?>
+  <?usevar obj:iwgrp?>
+  <?usevar obj:ixgrp?>
+  <?usevar obj:iroth?>
+  <?usevar obj:iwoth?>
+  <?usevar obj:ixoth?>
+
+  <?exec catalog:saveobject?>
+  <?useobject ${cgi:oid}?>
+  <?header ?>
+  <?include header/header.html?>
+  <?include header/title.html?>
+  <?include header/meta.html?>
+  <?include header/style.html?>
+  <script name="JavaScript1.2">
+  <!--//
+	function popupUserList() {
+		mode = 'height=530,width=430,scrollbars=1,resizable=1';
+		userlist = window.open('<?getvar cgi:script_name?>?page=admin/list_users.html', 'sub', mode);
+		userlist.focus();
+	}
+	function popupGroupList() {
+		mode = 'height=530,width=430,scrollbars=1,resizable=1';
+		grouplist = window.open('<?getvar cgi:script_name?>?page=admin/list_groups.html', 'sub', mode);
+		grouplist.focus();
+	}
+	function popupParentList(pid) {
+		mode = 'height=100,width=100,scrollbars=1,resizable=1';
+		page = '<?getvar cgi:script_name?>?page=admin/show_tree.html&parent=' + pid;
+		treelist = window.open(page, 'sub', mode);
+		treelist.focus();
+	}
+	function checkForDeleteObject() {
+		var oid = "<?getvar cgi:oid?>";
+		var name   = document.objectedit.name.value;
+		if(!name && parseInt(oid) > 0) {
+			if(confirm('Do you really want to delete this object?')) {
+				document.objectedit.submit();
+			}
+		}
+		else {
+			document.objectedit.submit();
+		}
+	}
+  //-->
+  </script>
+  <?include header/end.html?>
+
+<body>
+  <table border="0" width="700" align="center"><tr><td>
+
+
+  <div class="header">Object editor</div>
+
+  <div class="content">
+  <form name="objectedit" method="POST" action="<?getvar cgi:script_name ?>">
+  <input type="hidden" name="referer" value="<?getvar cgi:http_referer?>">
+  <input type="hidden" name="oid"   value="<?getvar cgi:oid?>">
+  <input type="hidden" name="do"    value="yes">
+  <input type="hidden" name="id"    value="<?getvar cgi:oid?>">
+  <input type="hidden" name="page"	value="<?getvar cgi:page?>">
+	  <table border="0">
+		<tr><td>
+	  <h3>Object data</h3>
+	  <table border="0">
+		<tr>
+			<th width="150">Name:</th>
+			<td><input type="text" name="name" value="<?getvar obj:name?>"></td>
+		</tr><tr>
+			<th>Type:</th>
+			<td>
+				<select name="type">	
+					<option value=<?getvar flags:link?>>link</option>
+					<option value=<?getvar flags:cat?>>catalog</option>
+					<option value=<?getvar flags:ref?>>reference</option>
+				</select>
+			</td>
+		</tr><tr>
+			<th>Keywords:</th>
+			<td><textarea rows="5" cols="18" name="keywords"><?getvar obj:keywords ?></textarea></td>
+		</tr><tr>
+			<th>Description:</th>
+			<td><textarea rows="5" cols="18" name="description"><?getvar obj:description ?></textarea></td>
+		</tr><tr>
+			<th>Data:</th>
+			<td><textarea rows="5" cols="18" name="data"><?getvar obj:data ?></textarea></td>
+		</tr><tr>
+			<th>Parent:</th>
+			<td?>
+				<input type="hidden" name="parent" value="<?getvar obj:parent?>">
+				<?getvar obj:pathname?>
+				[<a href="#" onClick="return popupParentList('<?getvar obj:parent?>')">select</a>]
+			</td>
+		</tr><tr>
+			<th>Owner:</th>
+			<td>
+				<input type="text" name="owner" value="<?getvar obj:owner ?>">
+				[<a href="#" onClick="return popupUserList()">c</a>]
+			</td>
+		</tr>
+		</tr><tr>
+			<th>Group:</th>
+			<td>
+				<input type="text" name="groupo" value="<?getvar obj:groupo ?>">
+				[<a href="#" onClick="return popupGroupList()">c</a>]	
+			</td>
+		</tr><tr>
+			<th>Sort:</th>
+			<td><input type="text" name="sort" value="<?getvar obj:sort ?>"></td>
+		</tr><tr>
+			<th>Template:</th>
+			<td><input type="text" name="template" value="<?getvar obj:template ?>"></td>
+		</tr>
+	</table>
+
+	</td><td valign="top">
+
+	<h3>Object flags</h3>
+	<table border="0">
+	  <tr>
+		<th width="150">Active:</th>
+		<td><input type="checkbox" name="active" value=<?getvar flags:active ?>></td>
+	  </tr>
+	</table>
+
+	<h3>Object permissions</h3>
+	<table border="0">
+	  <tr>
+		<th width="150">User:</th>
+		<td>
+			<input type="checkbox" name="irusr"  value=<?getvar flags:irusr?>>r
+			<input type="checkbox" name="iwusr" value=<?getvar flags:iwusr?>>w
+			<input type="checkbox" name="ixusr"  value=<?getvar flags:ixusr?>>x
+		</td>
+	  </tr>
+	  <tr>
+		<th width="150">Group:</th>
+		<td>
+			<input type="checkbox" name="irgrp"  value=<?getvar flags:irgrp?>>r
+			<input type="checkbox" name="iwgrp" value=<?getvar flags:iwgrp?>>w
+			<input type="checkbox" name="ixgrp"  value=<?getvar flags:ixgrp?>>x
+		</td>
+	  </tr>
+	  <tr>
+		<th width="150">Others:</th>
+		<td>
+			<input type="checkbox" name="iroth"  value=<?getvar flags:iroth?>>r
+			<input type="checkbox" name="iwoth" value=<?getvar flags:iwoth?>>w
+			<input type="checkbox" name="ixoth"  value=<?getvar flags:ixoth?>>x
+		</td>
+	  </tr>
+	</table>
+
+	
+	<td></tr>
+	<td align="right">&nbsp;</td>
+	<td align="left"><input type="button" onClick="checkForDeleteObject()" value="save"></td>
+	</tr></table>
+
+	</form>
+    </div>
+	<div class="footer"><?getvar cgi:status?></div>
+    </td></tr></table>
+
+
+</body>
+<?include footer/footer.html?>

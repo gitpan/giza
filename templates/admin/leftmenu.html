@@ -1,0 +1,49 @@
+	<tr>
+		<td width="165" valign="top">
+			<div class="leftheader"><div class="gi">giza</div><div class="za">admin</div></div><br/>
+			<div class="boxheader"><b>Menu</b></div>
+	
+			<div class="catalog">
+			<div class="menutext">
+				<a href="<?evar cgi:script_name?>?page=admin/object.html&amp;type=catalog&amp;action=new&amp;parent=<?evar giza:parent?>"
+				><img src="/gfx/stylish/newdir.png" alt="*" border="0"></a>
+				New dir
+				<br/>
+				<a href="<?evar cgi:script_name?>?page=admin/object.html&amp;type=link&amp;action=new&amp;parent=<?evar giza:parent?>"
+				><img src="/gfx/stylish/newurl.png" alt="*" border="0"></a>
+				New link
+				<br/>
+				<a href="<?evar cgi:script_name?>?page=admin/object.html&amp;type=reference&amp;action=new&amp;parent=<?evar giza:parent?>"
+				><img src="/gfx/stylish/symlink.png" alt="*" border="0"></a>
+				New ref
+				<br/>
+				<a href="<?evar cgi:script_name?>?page=prefs.html"
+				><img src="/gfx/stylish/etc-dir.png" alt="*" border="0"></a>
+				Prefs
+			</div>
+			</div>
+			<br/>
+
+			<div class="boxheader"><b>Search</b></div>
+			<div class="content">
+				<form method="POST" action="/admin/browse.pl" name="searchForm">
+					<!--<input type="image" name="submit" src="/gfx/stylish/search.png" alt="[search for:]"
+						onMouseOver="javascript:document.searchForm.submit.src = '/gfx/stylish/altsearch.png'"
+						onMouseOut=" javascript:document.searchForm.submit.src = '/gfx/stylish/search.png'"
+					> -->
+					<input type="hidden" name="page" value="search.html">
+					<input type="hidden" name="parent" value="<?evar giza:parent?>">
+					<input type="text" name="search" value="<?evar cgi:search?>">
+				</form>
+			</div><br/>
+				
+
+
+			<div class="boxheader"><b>Last 10 objects</b></div>
+			<div class="content">
+				<?set opt:no_object_cache?>
+				<?exec catalog:last10 'objects/last10.html'?>
+				<?exec catalog:reset?>
+				<?unset opt:no_object_cache?>
+			</div>
+		</td>

@@ -1,0 +1,145 @@
+#!/usr/bin/perl 
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+# gzexport - export giza database objects to xmlformat.
+# (c) 1996-2002 ABC Startsiden AS, see the file AUTHORS.
+#
+# See the file LICENSE in the Giza top source distribution tree for
+# licensing information. If this file is not present you are *not*
+# allowed to view, run, copy or change this software or it's sourcecode.
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+#####
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+use strict;
+use Giza;
+use Giza::Modules;
+use vars qw($opt_r @fetch $myself);
+
+# ### prototypes
+sub getopts($);
+sub expand_obj($);
+sub export($);
+sub get_obj_children($$);
+sub usage;
+
+($myself = $0) =~ s%.*/%%;
+
+getoptions(\@ARGV) or die usage;
+die usage unless defined scalar @fetch;
+
+my($giza, $db, $user) = giza_session(qw(db user));
+
+$db->connect or die($giza->error, "\n");
+expand_obj \@fetch;
+export \@fetch;
+$db->disconnect if $db->connected();
+
+sub printl {print @_, "\n"};
+
+sub export($)
+{
+	my($fetch) = @_;
+
+	printl('<?xml version="1.0"?>');
+	printl('<category_import>');
+	foreach my $oid (@$fetch) {
+		my $o = new Giza::Object(giza=>$giza, user=>$user, db=>$db, id=>$oid);
+		$o = $o->fetch(Id => $oid) or warn($giza->error, "\n"), next;
+
+		my $type = $o->type;
+		my $parent_expr = 'name:'. $db->expr_by_id($o->parent);
+		my $active = $o->active ? 'yes' : 'no';
+		
+		print  qq{\t<object type="$type">\n};
+		printf "\t\t<name>%s</name>\n", toxml($o->name) if $o->name;
+		printf "\t\t<parent>$parent_expr</parent>\n" if $parent_expr;
+		printf "\t\t<active>$active</active>\n" if $active;
+		printf "\t\t<description>%s</description>\n", toxml($o->description) if $o->description;
+		printf "\t\t<keywords>%s</keywords>\n", toxml($o->keywords) if $o->keywords;
+		printf "\t\t<data>%s</data>\n", toxml($o->data) if $o->data;
+		printf "\t\t<created>%s</created>\n", toxml($o->created) if $o->created;
+		printf "\t\t<changed>%s</changed>\n", toxml($o->changed) if $o->changed;
+		printf "\t\t<sort>%d</sort>\n", $o->sort if $o->sort;
+		printf "\t\t<template>%s</template>\n", toxml($o->template) if $o->template;
+		print  qq{\t</object>\n\n};
+
+		undef $o;
+	}
+		
+	printl('</category_import>');
+}
+
+sub expand_obj($)
+{
+	my($fetch) = @_;
+	my @final  = ();	
+	foreach my $expr (@$fetch) {
+		unless($expr =~ /^(name|id)/) {
+			$expr = 'name:'. $expr;
+		}
+		if($expr =~ /\*$/) {
+			get_obj_children($expr, \@final);	
+		} else {
+			my $id = $db->id_by_expr($expr);
+			push(@final, $id) if $id;
+		}
+	}
+	@$fetch = @final;
+	return 1;
+}
+
+sub get_obj_children($$)
+{
+	my($expr, $arr) = @_;
+	$expr =~ s/\*$//;
+	my $id = $db->id_by_expr($expr);
+	return undef unless $id;
+
+	my $query = qq{
+		SELECT id,name FROM catalog WHERE parent=$id
+	};
+
+	my $sth = $db->query($query) or return undef;
+	while(my $r = $db->fetchrow_hash($sth)) {
+		next unless $r->{id};
+		push @$arr, $r->{id};
+		get_obj_children("id:$r->{id}", $arr) if $opt_r;
+	}
+	$db->query_end($sth);	
+
+	return TRUE;
+}
+	
+sub getoptions($)
+{
+	my($argv) = @_;
+	return undef unless scalar @$argv;
+	
+	while($_ = shift @$argv) {
+		if(/-r$/ or /--recursive$/) {
+			$opt_r = 1;
+		} else {
+			push(@fetch, $_)
+		}
+	} TRUE;
+}
+
+sub usage
+{
+	sprintf("Usage: %s [-r|--recursive] expr1 .. exprN\n", $myself);
+}
+
+sub toxml {
+	my($str) = @_;
+	$str =~ s/</&lt;/g;
+	$str =~ s/>/&gt;/g;
+	$str =~ s/&/&amp;/g;
+	return $str;
+}

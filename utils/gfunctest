@@ -1,0 +1,35 @@
+#!/usr/bin/perl 
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+use strict;
+use Giza;
+use Giza::Modules;
+chdir $Giza::PREFIX;
+
+my($giza, $db, $user, $template)
+	= giza_session(qw(db user object template));
+
+my $funcloader = new Giza::Template::FuncLoader $template;
+
+my $modules = $giza->config->{template}{functions}{module};
+
+foreach my $module (@$modules) {
+	print "LOAD MODULE: $module\n";
+	my $m = $funcloader->load($module);
+	if(ref $m eq $module) {
+		$m->register();
+	} else {
+		print STDERR "Module ", $module, " is not good: ", $m, "\n";
+	}
+	print(STDERR $@, "\n") if $@;
+}
+
+$funcloader->exec('test', 'dumpdata');
+

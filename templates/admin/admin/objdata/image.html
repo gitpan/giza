@@ -1,0 +1,24 @@
+<?storeproperties image?>
+<?usevar image:image?>
+<?usevar image:thumbnail?>
+
+<ol>
+	<table border="0">
+	<tr>
+		<th>Image</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="image" value="<?evar image:image?>"></td>
+	</tr><tr>
+		<th>Thumbnail</th>
+	</tr><tr>
+		<td><input size="60" type="text" name="thumbnail" value="<?evar image:thumbnail?>"></td>
+	</tr><tr>
+		<th>Preview</th>
+	</tr><tr>
+		<td><img src="<?evar image:image?>" border="1"></td>
+	</tr>
+	</table>
+</ol>
+
+<?joinproperties image obj data?>
+<input type="hidden" name="data" value="<?evar obj:data?>">

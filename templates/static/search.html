@@ -1,0 +1,44 @@
+<?header?>
+<?set opt:get_component_values?>
+<?set opt:use_custom_templates?>
+<?include header/default.html?>
+
+<?usevar cgi:search ?>
+<?exec catalog:search '${cgi:search}'?>
+
+<body>
+	<table width="500" align="center" border="0"><tr><td>
+	<div class="header">Search Results</div><br/>
+	<div class="catalog"><b><?exec catalog:treeview?></b></div><br/>
+	<div class="description">Search results for query: <?evar cgi:search?></div><br/>
+	
+
+	<div class="catalog">
+		<table border="0">
+		<tr>
+			<?exec catalog:directories?>
+		</tr>
+		</table>
+		<br/>
+		<table bgcolor="#333333" border="1" cols="4">
+		<tr>
+			<?exec catalog:images?>
+		</tr>
+		</table><br/>
+		<?exec catalog:links?>
+	</div>
+	<br/>
+
+	<div class="catalog">
+		<form method="POST" action="/dForDynamic/browse.pl">
+			<input type="hidden" name="page"   value="search.html">
+			<input type="text"   name="search" value="">
+			<input type="submit" name=""       value="search">
+		</form>
+	</div><br/>
+
+	<?include footer/info.html?>
+	</td></tr></table>
+</body>
+
+<?include footer/footer.html ?>

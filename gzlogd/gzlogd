@@ -1,0 +1,191 @@
+#!/usr/bin/perl
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+# gzlogd - Giza Logging Daemon
+# (c) 1996-2002 ABC Startsiden AS, see the file AUTHORS.
+#
+# See the file LICENSE in the Giza top source distribution tree for
+# licensing information. If this file is not present you are *not*
+# allowed to view, run, copy or change this software or it's sourcecode.
+# -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+#####
+
+#%include <config.pimpx>
+
+#%ifdef PREFIX
+#%  define INCLUDE "%{PREFIX}/include"
+#%endif
+
+#%print use lib '%{INCLUDE}';
+
+use strict;
+
+use Giza;
+use Socket;
+use IO::Handle;
+use POSIX	qw(setsid);
+use Fcntl	qw(:flock);
+use vars	qw($PREFIX $LOCKFILE $LOGFILE $SOCKET $RUNASUSER);
+$|++;
+
+# ### function prototypes
+sub process_running($);
+sub fsetpnam($);
+
+# ### valid vars given to the lock socket.
+my %valid_vars = map {$_=>1} qw(name pid message);
+
+# ### install signal handlers
+$SIG{INT}	= \&cleanup_no_remove;
+$SIG{TERM}	= $SIG{HUP} = \&cleanup;
+$PREFIX 	= $Giza::PREFIX;
+
+# ### get defaults;
+my $g = new Giza;
+$LOCKFILE	= $g->config->{global}{lockfile} ||= "var/run/giza-logd.lock";
+$SOCKET		= $g->config->{global}{logsocket}||= "var/run/giza-logd.sock";
+$LOGFILE	= $g->config->{global}{logfile}  ||= "var/log/giza.log";
+$RUNASUSER	= $g->config->{global}{runasuser}||= "nobody";
+undef $g;
+
+# ###
+# chroot to $PREFIX (if possible)...
+chroot $PREFIX;
+chdir $PREFIX;
+# ..and change priviliges to $RUNASUSER (if possible)
+my $run_as_uid = [(getpwnam $RUNASUSER)]->[2];
+my $run_as_gid = [(getpwnam $RUNASUSER)]->[3];
+$< = $> = $run_as_uid; # change $EFFECTIVE_UID and $REAL_UID
+$( = $) = $run_as_gid; # change $EFFECTIVE_GID and $REAL_GID
+
+# set argv[0]
+fsetpnam "[Giza/Log Daemon]";
+
+# ### check for arguments.
+if($ARGV[0] eq 'restart') {
+	stop();
+}
+elsif($ARGV[0] eq 'stop') {
+	stop();
+	exit();
+}
+
+# ### become a daemon
+my $pid = fork;
+exit if $pid;
+cleanup_no_remove("Couldn't fork: $!") unless defined $pid;
+setsid or cleanup_no_remove("Couldn't start a new session: $!");
+lockfile($LOCKFILE) or cleanup_no_remove();
+
+# ### Open socket.
+socket(SERVER, PF_UNIX, SOCK_DGRAM, 0);
+unlink $SOCKET;
+bind(SERVER, sockaddr_un($SOCKET))
+	or cleanup("Can't create server: $!");
+chmod 0777, $SOCKET;
+SERVER->autoflush(1);
+
+while(my $entry = <SERVER>) {
+	# ### parse each request to the socket.
+	$entry =~ tr/\n//d; # remove newlines.
+	my @fields = split /\s+/, $entry, 3;
+	my %entry;
+	foreach my $field (@fields) {
+		my($key, $value) = split '=', $field, 2;
+		next unless $valid_vars{$key};
+		next if length $value > 2048;
+		$entry{$key} = $value;
+	}
+	$entry{name} ||= 'giza/unknown';
+	my($mon, $day, $time, $year) = (split(/\s+/, localtime))[1..4];
+	my $message = sprintf("%s %s %s %d %s[%d]: %s\n",
+		$mon,
+		$day,
+		$time,
+		$year,
+		$entry{name},
+		$entry{pid},
+		$entry{message},
+	);
+	# ...and print valid log entries to the log:
+	my $logfh = $g->safeopen($LOGFILE, O_WRONLY|O_CREAT|O_APPEND)
+	unless($logfh) {
+		cleanup("Couldn't open logfile: $LOGFILE: $!");
+	}
+	$logfh->autoflush(1);
+	flock $logfh, LOCK_EX;	
+	print $logfh$message;
+	flock $logfh, LOCK_UN;
+	close $logfh;
+}
+	
+
+sub cleanup {
+	my($message) = @_;
+	print STDERR "$message\n" if $message;
+	unlink $LOCKFILE if -f $LOCKFILE;
+	exit;
+}
+
+sub cleanup_no_remove {
+	my($message) = @_;
+	print STDERR "$message\n" if $message;
+	exit;
+}
+
+sub process_running($) {
+	my($pid) = @_;
+	if(-d "/proc/$pid") {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+sub lockfile {
+	if(-l $LOCKFILE) {
+		cleanup_no_remove("Security: Lockfile is a symbolic link. Possible race attempt detected");
+	}
+	if(-f $LOCKFILE) {
+		my $lock_pid = getpid($LOCKFILE);
+		unless($lock_pid or $lock_pid =~ /^\d+$/) {
+			cleanup_no_remove("Invalid lock file. Please check and remove by hand.");
+		}
+		if(process_running($lock_pid)) {
+			cleanup_no_remove("We're already running under pid: $lock_pid");
+		} else {
+			print STDERR "Stale lockfile found (owned by PID $lock_pid). Removing\n";
+			unlink $LOCKFILE;
+		}
+	}	
+
+	open  LOCK, ">$LOCKFILE" or cleanup_no_remove("Couldn't create lockfile: $LOCKFILE: $!");
+	print LOCK "$$\n";
+	close LOCK;
+
+	return TRUE;
+}
+
+sub getpid {
+	my($pidfile) = @_;
+	open LOCK, $pidfile or cleanup_no_remove("Couldn't open lockfile $pidfile: $!");
+	my $lock_pid = undef; {
+		local $/ = undef;
+		$lock_pid = <LOCK>;
+	}
+	chomp $lock_pid;
+	close LOCK;
+	return $lock_pid;
+}
+	
+
+sub stop {
+	if(-f $LOCKFILE) {
+		my $pid = getpid($LOCKFILE) or cleanup_no_remove("Log daemon not running.");
+		kill 15, $pid or cleanup_no_remove("Couldn't kill $pid: $!");
+		sleep 1;
+	} else {
+		cleanup_no_remove("Log daemon not running.");
+	}
+}
+
+sub fsetpnam($) {$0=shift};
